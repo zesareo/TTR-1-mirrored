@@ -4,7 +4,7 @@ from .models import Usuario,Alumno,Agente,Materia,ETS,Alumno_ETS,Tipo_tramite,Tr
 class UsuarioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Usuario
-        fields = ('rol','correo','contrasena','paterno','materno','nombre','nacimiento','telefono','domicilio')
+        fields = ('id','rol','correo','contrasena','paterno','materno','nombre','nacimiento','telefono','domicilio')
 
 class AlumnoSerializer(serializers.ModelSerializer):
     """
@@ -15,6 +15,12 @@ class AlumnoSerializer(serializers.ModelSerializer):
         model = Alumno
         fields = ('usuario','boleta','curp','fecha_ingreso')
 
+    def create(self, validated_data):
+        usuario_data = validated_data.pop('usuario')
+        usuario = Usuario.objects.create(**usuario_data)
+        alumno = Alumno.objects.create(usuario = usuario, **validated_data)
+        return alumno
+
 class AgenteSerializer(serializers.ModelSerializer):
     """
     A usuer serializer to return the user details
@@ -24,21 +30,41 @@ class AgenteSerializer(serializers.ModelSerializer):
         model = Agente
         fields = ('usuario','folio')
 
-class MateriaSerializer(serializers.ModelSerializer):
+    def create(self, validated_data):
+        usuario_data = validated_data.pop('usuario')
+        usuario = Usuario.objects.create(**usuario_data)
+        agente = Agente.objects.create(usuario = usuario, **validated_data)
+        return agente
+
+class MateriaSerializer(serializers.ModelSerializer):   
     class Meta:
         model = Materia
-        fields = ('nivel','nombre','carga')
+        fields = ('id','nivel','nombre','carga')
 
 class ETSSerializer(serializers.ModelSerializer):
-    #materia = serializers.RelatedField(source='materia', read_only=True)
-    materia = MateriaSerializer(many=True, read_only=True)
+    """
+    A materia serializer to return the materia details
+    """
+    materia = MateriaSerializer(read_only = False)
     class Meta:
         model = ETS
         fields = ('turno','precio','materia')
 
+    def create(self, validated_data):
+        materias_data = validated_data.pop('materia')
+        materia = Materia.objects.create(**materias_data)
+        ets = ETS.objects.create(materia = materia, **validated_data)
+        return ets
+        
 class Alumno_ETSSerializer(serializers.ModelSerializer):
-    alumno = AlumnoSerializer(many=True, read_only=True)
-    ets = MateriaSerializer(many=True, read_only=True)
+    """
+    A alumno & ets serializer to return the alumno & ets details
+    """
+    alumno = AlumnoSerializer(read_only=False)
+    ets = ETSSerializer(read_only=False)
+    #alumno = serializers.PrimaryKeyRelatedField(read_only=False)
+    #ets = serializers.PrimaryKeyRelatedField(read_only=False)
+   
     class Meta:
         model = Alumno_ETS
         fields = ('alumno','ets','fecha','estatus')

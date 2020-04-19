@@ -37,7 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'appstart.apps.AppstartConfig',
+    'appstart.apps.AppstartConfig', #Activate app
+    'rest_framework', #enable rest_framework
+
 ]
 
 MIDDLEWARE = [
