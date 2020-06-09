@@ -15,14 +15,38 @@ class Usuario(models.Model):
 
     def __str__(self):
         return "%s User" % self.nombre
-
+    
 class Alumno(models.Model):   
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, primary_key=True,) #One to one relations
+    #usuario = models.ForeignKey('Usuario', on_delete=models.CASCADE, null= True) 
     boleta = models.CharField('Boleta', max_length=10,blank = False)
     curp = models.CharField('CURP',max_length=18, blank = False)
     fecha_ingreso = models.DateField() #NULL
 
     def __str__(self):
+        return "%s boleta" % self.boleta
+
+    def display_usuario(self):
+        """
+        Creates a string for the Usuario. This is required to display genre in Admin.
+        """
+        #return ', '.join([ usuario.nombre for usuario in self.usuario.all()[:3] ])  #Usariamos esto si la relacion es con muchos, en este caso es de uno la relacion
+
+    display_usuario.short_description = 'Nombre'
+
+class AlumnoInstance(models.Model):
+    """
+    Modelo que representa una copia específica de un libro (i.e. que puede ser prestado por la biblioteca).
+    """
+    usuario = models.OneToOneField(Alumno, on_delete=models.CASCADE, primary_key=True,) #One to one relations
+    boleta = models.CharField('Boleta', max_length=10,blank = False)
+    curp = models.CharField('CURP',max_length=18, blank = False)
+    fecha_ingreso = models.DateField() #NULL      
+
+    def __str__(self):
+        """
+        String para representar el Objeto del Modelo
+        """
         return "%s boleta" % self.boleta
 
 class Agente(models.Model):   
@@ -65,5 +89,3 @@ class Archivo_adjunto(models.Model):
     tipo_archivo = models.ForeignKey(Tipo_archivo, related_name='tipo_archivos', on_delete = models.CASCADE) #Many to one
     documento = models.BinaryField()
 
-
-    
