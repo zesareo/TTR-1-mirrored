@@ -4,19 +4,20 @@ import './index.css';
 import App from './App';
 import RegistroETS from './RegistroETS';
 import Checkout from './Checkout';
-import SignInSide from './SignInSide';
+import SignInSide from './components/SignInSide';
+import SignUp from './components/SignUp';
 import MaterialTableDemo from './MaterialTableDemo';
-import AppLogin from './components/AppLogin';
 import * as serviceWorker from './serviceWorker';
 
 
 ReactDOM.render(
+  
   <React.StrictMode>
+    <SignUp/>
+    <SignInSide/>
     <App />
     <RegistroETS/>
     <Checkout/>
-    <SignInSide/>
-    <AppLogin/>
     <MaterialTableDemo/>
   </React.StrictMode>,
   document.getElementById('root')  
