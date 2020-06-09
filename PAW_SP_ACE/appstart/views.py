@@ -123,6 +123,8 @@ class UsuarioMixin(object):
     serializer_class = UsuarioSerializer
 
 class UsuarioList(UsuarioMixin, ListCreateAPIView):
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     pass
 class UsuarioDetails(UsuarioMixin, RetrieveUpdateDestroyAPIView):
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     pass

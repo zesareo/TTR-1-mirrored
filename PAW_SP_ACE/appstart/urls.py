@@ -1,6 +1,5 @@
 from django.urls import path, re_path, include
 from . import views
-from rest_framework_jwt.views import obtain_jwt_token
 
 urlpatterns = [
     #Refencia a vistas basadas en clases && Vistas con clases genericas y mixins
@@ -16,8 +15,6 @@ urlpatterns = [
     path('api/appstart/Archivo_Adjunto', views.Archivo_adjuntoListCreate.as_view() ), #Use Capital letters in Adjunto because browser converter to Capital in automatic
     re_path(r'^api/appstartv2/Usuario/$', views.UsuarioList.as_view() ),
     re_path(r'^api/appstartv2/Usuario/(?P<pk>[0-9]+)$', views.UsuarioDetails.as_view() ),
-    path('token-auth/', obtain_jwt_token),
-    
     
     #Refencia a vistas basadas en funciones
     
