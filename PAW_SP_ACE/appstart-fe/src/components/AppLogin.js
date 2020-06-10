@@ -30,7 +30,7 @@ class AppLogin extends Component {
 
   handle_login = (e, data) => {
     e.preventDefault();
-    fetch('http://localhost:8000/token-auth/', {
+    fetch('http://localhost:8000/core/token-auth/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
