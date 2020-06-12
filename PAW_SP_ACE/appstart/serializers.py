@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import Usuario,Alumno,Agente,Materia,ETS,Alumno_ETS,Tipo_tramite,Tramite,Tipo_archivo,Archivo_adjunto
 
 class UsuarioSerializer(serializers.ModelSerializer):
+    
     class Meta:
         model = Usuario
         fields = ('id','rol','correo','contrasena','paterno','materno','nombre','nacimiento','telefono','domicilio')

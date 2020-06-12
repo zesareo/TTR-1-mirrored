@@ -23,5 +23,5 @@ urlpatterns = [
     path('core/', include('core.urls')),
     path('token/obtain/', jwt_views.TokenObtainPairView.as_view(), name='token_create'),  # override sjwt stock token
     path('token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
-    #path('api/appstart/v2', include('appstart-v2.urls')),
+    path('api/appstart/v2/', include('appstart_v2.urls')),
 ]
