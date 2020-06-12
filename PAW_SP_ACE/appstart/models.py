@@ -1,7 +1,5 @@
 from django.db import models
 
-# Create your models here.
-
 class Usuario(models.Model):    
     rol = models.CharField('Rol', max_length=45,blank = False)
     correo = models.CharField('Correo', max_length=45,blank=False)

@@ -10,6 +10,12 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from .serializers import UserSerializer, UserSerializerWithToken
 
+# View Pseudocode
+from rest_framework.authtoken.models import Token
+
+def token_request(request):
+       if user_requested_token() and token_request_is_warranted():
+           new_token = Token.objects.create(user=request.user)
 
 @api_view(['GET'])
 def current_user(request):

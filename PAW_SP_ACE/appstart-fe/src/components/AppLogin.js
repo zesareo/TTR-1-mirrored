@@ -16,21 +16,23 @@ class AppLogin extends Component {
 
   componentDidMount() {
     if (this.state.logged_in) {
-      fetch('http://localhost:8000/core/current_user/', {
+      //fetch('http://localhost:8000/core/current_user/', {
+      fetch('http://localhost:8000/token/refres/', { 
         headers: {
           Authorization: `JWT ${localStorage.getItem('token')}`
         }
       })
         .then(res => res.json())
         .then(json => {
-          this.setState({ username: json.username });
+          this.setState({ username: json.refresh });
         });
     }
   }
 
   handle_login = (e, data) => {
     e.preventDefault();
-    fetch('http://localhost:8000/core/token-auth/', {
+    //fetch('http://localhost:8000/core/token-auth/
+    fetch('http://localhost:8000/token/obtain/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -43,7 +45,8 @@ class AppLogin extends Component {
         this.setState({
           logged_in: true,
           displayed_form: '',
-          username: json.user.username
+          //username: json.user.username
+          username: json.refresh
         });
       });
   };
