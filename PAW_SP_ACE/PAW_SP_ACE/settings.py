@@ -25,7 +25,7 @@ SECRET_KEY = '@7wt8z9n(w6ep*6_ko8&g0)x_6reb^t=+@p-13mfj0ic*$*=^3'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1','localhost']
 
 
 # Application definition
@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'rest_framework', #enable rest_framework
     'corsheaders', #enable corsheades
     'rest_framework.authtoken',
+    'django.contrib.admindocs',  #Documentacion Django
+    'drf_yasg', #Documentacion DRF
 ]
 
 MIDDLEWARE = [

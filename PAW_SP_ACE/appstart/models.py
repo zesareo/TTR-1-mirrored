@@ -28,7 +28,7 @@ class Alumno(models.Model):
         """
         Creates a string for the Usuario. This is required to display genre in Admin.
         """
-        #return ', '.join([ usuario.nombre for usuario in self.usuario.all()[:3] ])  #Usariamos esto si la relacion es con muchos, en este caso es de uno la relacion
+        return ', '.join([ usuario.nombre for usuario in self.usuario.all()[:3] ])  #Usariamos esto si la relacion es con muchos, en este caso es de uno la relacion
 
     display_usuario.short_description = 'Nombre'
 
