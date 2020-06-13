@@ -13,7 +13,15 @@ Mira **Deployment** para conocer como desplegar el proyecto.
 _Que cosas necesitas para instalar el software y como instalarlas_
 
 ```
-Da un ejemplo
+    Python: 3.7
+    node v10.16.3
+
+
+    Pip 19.0.3 
+    Django Rest Framework: 3.11
+    Django: 3.0.5
+    
+
 ```
 
 ### Instalación 🔧
