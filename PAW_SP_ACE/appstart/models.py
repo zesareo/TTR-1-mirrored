@@ -11,8 +11,8 @@ class Usuario(models.Model):
     telefono = models.IntegerField('Teléfono',null=True) #NULL   
     domicilio = models.CharField('Domicilio', max_length=150) #NULL
 
-    def __str__(self):
-        return "%s User" % self.nombre
+    #def __str__(self):
+     #   return "%s User" % self.nombre
     
 class Alumno(models.Model):   
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, primary_key=True,) #One to one relations

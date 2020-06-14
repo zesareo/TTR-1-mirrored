@@ -23,9 +23,9 @@ from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIV
 # Create your views here.
 
 #VISTAS GENERICAS
-class UsuarioListCreate(generics.ListCreateAPIView):
-    queryset = Usuario.objects.all()
-    serializer_class = UsuarioSerializer
+#class UsuarioListCreate(generics.ListCreateAPIView):
+ #   queryset = Usuario.objects.all()
+  #  serializer_class = UsuarioSerializer
 
 class AlumnoListCreate(generics.ListCreateAPIView):
     queryset = Alumno.objects.all()
@@ -64,7 +64,7 @@ class Archivo_adjuntoListCreate(generics.ListCreateAPIView):
     serializer_class = Archivo_adjuntoSerializer
 
 #VISTAS BASADAS EN FUNCIONES
-'''
+
 @api_view(['GET', 'POST'])
 def usuario_list(request):
     """
@@ -108,6 +108,7 @@ def usuario_details(request, pk):
 '''
 #VISTAS CON CLASES Y MIXINS
 '''
+
 class UsuarioList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
 #List all Alumno, or create a new Alumno
     queryset = Usuario.objects.all()
@@ -116,8 +117,10 @@ class UsuarioList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.Gener
         return self.list(request, *args, **kwargs)
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
-'''
+
+
 #VISTAS CON CLASES GENERICAS Y MIXINS
+
 class UsuarioMixin(object):
     queryset = Usuario.objects.all()
     serializer_class = UsuarioSerializer
