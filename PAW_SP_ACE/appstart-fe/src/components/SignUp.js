@@ -93,6 +93,7 @@ export default function SignUp() {
                 label="Correo"
                 name="correo"
                 autoComplete="correo"
+                type="email"
               />
             </Grid>
             <Grid item xs={12}>
