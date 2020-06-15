@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Usuario,Alumno,Agente,Materia,ETS,Alumno_ETS,Tipo_tramite,Tramite,Tipo_archivo,Archivo_adjunto
+from .models import Usuario,Alumno,Agente,Materia,ETS,Tipo_tramite,Tramite,Tipo_archivo,Archivo_adjunto
 from django.contrib.auth.models import User
 
 class UsuarioSerializer(serializers.ModelSerializer):
@@ -70,7 +70,7 @@ class ETSSerializer(serializers.ModelSerializer):
    
     class Meta:
         model = ETS
-        fields = ['turno','precio','materia']
+        fields = ['alumno','turno','precio','materia','fecha','estatus']
      
     '''
     def create(self, validated_data):
@@ -80,10 +80,11 @@ class ETSSerializer(serializers.ModelSerializer):
         return ets_
     '''
 
+'''
 class Alumno_ETSSerializer(serializers.ModelSerializer):
-    """
-    A alumno & ets serializer to return the alumno & ets details
-    """
+    
+    #A alumno & ets serializer to return the alumno & ets details
+    
     #usuario = UsuarioSerializer(required=True)
     #alumno = AlumnoSerializer(read_only=False)
     #materia = MateriaSerializer(read_only = False)
@@ -95,21 +96,7 @@ class Alumno_ETSSerializer(serializers.ModelSerializer):
     class Meta:
         model = Alumno_ETS
         fields = ['alumno','ets','fecha','estatus']
-
-    '''
-    def create(self, validated_data):
-        etss_data = validated_data.pop('ets')
-        ets = ETS.objects.create(**etss_data)
-        
-        alumnos_data = validated_data.pop('alumno')
-        alumno = Alumno.objects.create(**alumnos_data)
-
-        ets_alumno = [ets,alumno]
-        
-        alumno_ets = Alumno_ETS.objects.create(ets_alumno = ets_alumno, **validated_data)
-        
-        return alumno_ets
-    '''
+'''
 
 class Tipo_tramiteSerializer(serializers.ModelSerializer):
     class Meta:
@@ -117,11 +104,11 @@ class Tipo_tramiteSerializer(serializers.ModelSerializer):
         fields = ['nombre']
 
 class TramiteSerializer(serializers.ModelSerializer):
-    alumno = AlumnoSerializer(many=True, read_only=True)
-    tipo_tramite = Tipo_tramiteSerializer(many=True, read_only=True)
+    #alumno = AlumnoSerializer(many=True, read_only=True)
+    #tipo_tramite = Tipo_tramiteSerializer(many=True, read_only=True)
     class Meta:
         model = Tramite
-        fields = ['alumno','tipo_tramite','fecha_solicitud','ciclo_escolar','estatus','documento','comentario']
+        fields = ['alumno','tipo_tramite','fecha_solicitud','ciclo_escolar','estatus','documento_firmado','comentario','atributos_dictamen']
 
 class Tipo_archivoSerializer(serializers.ModelSerializer):
     class Meta:
@@ -129,8 +116,8 @@ class Tipo_archivoSerializer(serializers.ModelSerializer):
         fields = ['nombre']
 
 class Archivo_adjuntoSerializer(serializers.ModelSerializer):
-    tramite = TramiteSerializer(many=True, read_only=True)
-    tipo_archivo = Tipo_archivoSerializer(many=True, read_only=True)
+    #tramite = TramiteSerializer(many=True, read_only=True)
+    #tipo_archivo = Tipo_archivoSerializer(many=True, read_only=True)
     class Meta:
         model = Archivo_adjunto
         fields = ['tramite','tipo_archivo','documento']

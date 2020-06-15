@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from .models import Usuario, Alumno, Agente, Materia, ETS, Alumno_ETS, Tipo_tramite, Tramite, Tipo_archivo, Archivo_adjunto
-from .serializers import UsuarioSerializer,AlumnoSerializer,AgenteSerializer,MateriaSerializer,ETSSerializer,Alumno_ETSSerializer,Tipo_tramiteSerializer,TramiteSerializer,Tipo_archivoSerializer,Archivo_adjuntoSerializer
+from .models import Usuario, Alumno, Agente, Materia, ETS, Tipo_tramite, Tramite, Tipo_archivo, Archivo_adjunto
+from .serializers import UsuarioSerializer,AlumnoSerializer,AgenteSerializer,MateriaSerializer,ETSSerializer,Tipo_tramiteSerializer,TramiteSerializer,Tipo_archivoSerializer,Archivo_adjuntoSerializer
 from rest_framework import permissions
 
 #Vistas basadas en funciones
@@ -43,9 +43,11 @@ class ETSListCreate(generics.ListCreateAPIView):
     queryset = ETS.objects.all()
     serializer_class = ETSSerializer
 
+'''
 class Alumno_ETSListCreate(generics.ListCreateAPIView):
     queryset = Alumno_ETS.objects.all()
     serializer_class = Alumno_ETSSerializer
+'''
 
 class Tipo_tramiteListCreate(generics.ListCreateAPIView):
     queryset = Tipo_tramite.objects.all()
