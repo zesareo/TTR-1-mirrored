@@ -59,7 +59,7 @@ class Materia(models.Model):
 class ETS(models.Model):    
     turno = models.BooleanField()
     precio = models.FloatField('Precio', null = False)
-    materia =  models.ForeignKey(Materia, related_name='materias', on_delete = models.CASCADE) #Many to one
+    materia =  models.ForeignKey(Materia, related_name='etss', on_delete = models.CASCADE) #Many to one
 
 class Alumno_ETS(models.Model):
     alumno = models.ForeignKey(Alumno, on_delete = models.CASCADE) #Many to one
