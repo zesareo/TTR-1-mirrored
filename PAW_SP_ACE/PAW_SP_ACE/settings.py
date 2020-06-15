@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'appstart.apps.AppstartConfig', #Activate app
     'appstart_v2.apps.AppstartV2Config', #Activate app
-    'core.apps.CoreConfig', #Activate app
+    'core.apps.CoreConfig', #Activate app Manejo de sesion auth
     'rest_framework', #enable rest_framework
     'corsheaders', #enable corsheades
     'rest_framework.authtoken',

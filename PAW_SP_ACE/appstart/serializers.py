@@ -1,11 +1,13 @@
 from rest_framework import serializers
 from .models import Usuario,Alumno,Agente,Materia,ETS,Alumno_ETS,Tipo_tramite,Tramite,Tipo_archivo,Archivo_adjunto
+from django.contrib.auth.models import User
 
 class UsuarioSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Usuario
         fields = ['id','rol','correo','contrasena','paterno','materno','nombre','nacimiento','telefono','domicilio']
+
 
 class AlumnoSerializer(serializers.ModelSerializer):
     """
@@ -20,6 +22,14 @@ class AlumnoSerializer(serializers.ModelSerializer):
         usuario_data = validated_data.pop('usuario')
         usuario = Usuario.objects.create(**usuario_data)
         alumno = Alumno.objects.create(usuario = usuario, **validated_data)
+        print ('Hello, world!')
+        user = validated_data.pop('boleta')
+        #passw = validated_data.pop('usuario.contrasena')
+        correo = validated_data.pop('usuario[1]')
+
+        user = User.objects.create_user(user, 'correo@CORREO', 'jeje')
+        user.save()
+
         return alumno
 
 class AgenteSerializer(serializers.ModelSerializer):
@@ -37,38 +47,69 @@ class AgenteSerializer(serializers.ModelSerializer):
         agente = Agente.objects.create(usuario = usuario, **validated_data)
         return agente
 
+
 class MateriaSerializer(serializers.ModelSerializer):   
     class Meta:
         model = Materia
         fields = ['id','nivel','nombre','carga']
+    
+    '''
+    etss = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    class Meta:
+        model = Materia
+        fields = ['id','nivel','nombre','carga','etss']
+    '''
+
 
 class ETSSerializer(serializers.ModelSerializer):
     """
     A materia serializer to return the materia details
     """
-    materia = MateriaSerializer(read_only = False)
+    #materia = MateriaSerializer(read_only = False)
+    #materia = serializers.StringRelatedField(many=True)
+   
     class Meta:
         model = ETS
         fields = ['turno','precio','materia']
-
+     
+    '''
     def create(self, validated_data):
         materias_data = validated_data.pop('materia')
         materia = Materia.objects.create(**materias_data)
         ets = ETS.objects.create(materia = materia, **validated_data)
-        return ets
-        
+        return ets_
+    '''
+
 class Alumno_ETSSerializer(serializers.ModelSerializer):
     """
     A alumno & ets serializer to return the alumno & ets details
     """
-    alumno = AlumnoSerializer(read_only=False)
-    ets = ETSSerializer(read_only=False)
+    #usuario = UsuarioSerializer(required=True)
+    #alumno = AlumnoSerializer(read_only=False)
+    #materia = MateriaSerializer(read_only = False)
+    #ets = ETSSerializer(read_only=False) #Lista 
+    
     #alumno = serializers.PrimaryKeyRelatedField(read_only=False)
     #ets = serializers.PrimaryKeyRelatedField(read_only=False)
    
     class Meta:
         model = Alumno_ETS
         fields = ['alumno','ets','fecha','estatus']
+
+    '''
+    def create(self, validated_data):
+        etss_data = validated_data.pop('ets')
+        ets = ETS.objects.create(**etss_data)
+        
+        alumnos_data = validated_data.pop('alumno')
+        alumno = Alumno.objects.create(**alumnos_data)
+
+        ets_alumno = [ets,alumno]
+        
+        alumno_ets = Alumno_ETS.objects.create(ets_alumno = ets_alumno, **validated_data)
+        
+        return alumno_ets
+    '''
 
 class Tipo_tramiteSerializer(serializers.ModelSerializer):
     class Meta:
