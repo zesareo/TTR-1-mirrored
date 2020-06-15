@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import MaterialTable from 'material-table';
 import MaterialTableDemo2 from './MaterialTableDemo2';
 import axios from 'axios';
+import { formatMs } from '@material-ui/core';
 
 export default class MaterialTableDemo extends Component {
   constructor(props){
@@ -13,9 +14,11 @@ export default class MaterialTableDemo extends Component {
         { title: 'rol', field: 'rol' },
         { title: 'correo', field: 'correo' },
         { title: 'contrasena', field: 'contrasena'},  
+        { title: 'paterno', field: 'paterno' },
         { title: 'paterno', field: 'materno' },
         { title: 'nombre', field: 'nombre' },
-        { title: 'nacimiento', field: 'nacimiento', type: 'date' },
+       // { title: 'nacimiento', field: 'nacimiento' , type: date formatMs(YYYY-MM-DD)},
+       { title: 'nacimiento', field: 'nacimiento'},
         { title: 'telefono', field: 'telefono' },
         { title: 'domicilio', field: 'domicilio' },
         
@@ -54,7 +57,8 @@ export default class MaterialTableDemo extends Component {
                   const data = [...prevState.data];
                   data.push(newData);
                   //API CREAR                  
-                  axios.post('http://localhost:8000/api/appstart/v2/Usuario',newData)
+                  console.log("data",newData)
+                  axios.post('http://localhost:8000/api/appstart/v2/Usuario/',newData)
                   return { ...prevState, data };
                 });
               }, 600);
