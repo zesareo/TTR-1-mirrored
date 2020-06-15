@@ -50,28 +50,32 @@ class  UsuariosList  extends  Component {
                 <thead  key="thead">
                 <tr>
                     <th>#</th>
-                    <th>Nombre</th>
+                    <th>rol</th>
+                    <th>Correo</th>                   
                     <th>Paterno</th>
                     <th>Materno</th>
+                    <th>Nombre</th>
+                    <th>Nacimiento</th>
                     <th>Telefono</th>
-                    <th>Correo</th>
                     <th>Direccion</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                     
-                    {/*this.state.usuarios.map( c  =>
-                    <tr  key={c.pk}>
-                        <td>{c.pk}  </td>
-                        <td>{c.nombre}</td>
+                    {/*this.state.usuario.map( c  =>
+                    <tr  key={c.id}>
+                        <td>{c.rol}  </td>
+                        <td>{c.correo}</td>                    
                         <td>{c.paterno}</td>
                         <td>{c.materno}</td>
-                        <td>{c.correo}</td>
+                        <td>{c.nombre}  </td>
+                        <td>{c.nacimiento}</td>
+                        <td>{c.telefono}  </td>
                         <td>{c.direccion}</td>
                         <td>
-                        <button  onClick={(e)=>  this.handleDelete(e,c.pk) }> Delete</button>
-                        <a  href={"/Usuario/" + c.pk}> Update</a>
+                        <button  onClick={(e)=>  this.handleDelete(e,c.id) }> Delete</button>
+                        <a  href={"/Usuario/" + c.id}> Update</a>
                         </td>
                     </tr>)*/}
                 </tbody>

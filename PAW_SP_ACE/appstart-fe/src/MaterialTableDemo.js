@@ -1,71 +1,92 @@
-import React from 'react';
+import React, {Component} from 'react';
 import MaterialTable from 'material-table';
+import MaterialTableDemo2 from './MaterialTableDemo2';
+import axios from 'axios';
 
-export default function MaterialTableDemo() {
-  const [state, setState] = React.useState({
-    columns: [
-      { title: 'Name', field: 'name' },
-      { title: 'Surname', field: 'surname' },
-      { title: 'Birth Year', field: 'birthYear', type: 'numeric' },
-      {
-        title: 'Birth Place',
-        field: 'birthCity',
-        lookup: { 34: 'İstanbul', 63: 'Şanlıurfa' },
-      },
-    ],
-    data: [
-      { name: 'Mehmet', surname: 'Baran', birthYear: 1987, birthCity: 63 },
-      {
-        name: 'Zerya Betül',
-        surname: 'Baran',
-        birthYear: 2017,
-        birthCity: 34,
-      },
-    ],
-  });
+export default class MaterialTableDemo extends Component {
+  constructor(props){
+    super(props);
 
-  return (
-    <MaterialTable
-      title="Editable Example"
-      columns={state.columns}
-      data={state.data}
-      editable={{
-        onRowAdd: (newData) =>
-          new Promise((resolve) => {
-            setTimeout(() => {
-              resolve();
-              setState((prevState) => {
-                const data = [...prevState.data];
-                data.push(newData);
-                return { ...prevState, data };
-              });
-            }, 600);
-          }),
-        onRowUpdate: (newData, oldData) =>
-          new Promise((resolve) => {
-            setTimeout(() => {
-              resolve();
-              if (oldData) {
-                setState((prevState) => {
+    this.state={
+      columns: [
+        //{ title: 'id', field: 'id', type: 'numeric' },
+        { title: 'rol', field: 'rol' },
+        { title: 'correo', field: 'correo' },
+        { title: 'contrasena', field: 'contrasena'},  
+        { title: 'paterno', field: 'materno' },
+        { title: 'nombre', field: 'nombre' },
+        { title: 'nacimiento', field: 'nacimiento', type: 'date' },
+        { title: 'telefono', field: 'telefono' },
+        { title: 'domicilio', field: 'domicilio' },
+        
+      ],      
+      data: [ 
+        { rol: 'Alumno',correo :'a@a', contrasena: 'jeje', paterno: 'x', materno: 'Baran',nombre: 'Baran', nacimiento:'12/12/1992',telefono:'3322323',domicilio:'xyw' },
+      ],
+    }
+  }
+
+  componentDidMount(){
+    const url = 'http://localhost:8000/api/appstart/v2/Usuario/';
+    /*
+    axios.get(url).then(response => response.data).then(data => {
+      console.log("data",data)
+    })*/
+    
+    axios.get(url).then(response => response.data).then(data => {
+      this.setState({data:data})
+    })
+
+  }
+
+  render(){
+    return (
+      <MaterialTable
+        title="Editable Example"
+        columns={this.state.columns}
+        data={this.state.data}
+        editable={{
+          onRowAdd: (newData) =>
+            new Promise((resolve) => {
+              setTimeout(() => {
+                resolve();
+                this.setState((prevState) => {
                   const data = [...prevState.data];
-                  data[data.indexOf(oldData)] = newData;
+                  data.push(newData);
+                  //API CREAR                  
+                  axios.post('http://localhost:8000/api/appstart/v2/Usuario',newData)
                   return { ...prevState, data };
                 });
-              }
-            }, 600);
-          }),
-        onRowDelete: (oldData) =>
-          new Promise((resolve) => {
-            setTimeout(() => {
-              resolve();
-              setState((prevState) => {
-                const data = [...prevState.data];
-                data.splice(data.indexOf(oldData), 1);
-                return { ...prevState, data };
-              });
-            }, 600);
-          }),
-      }}
-    />
-  );
+              }, 600);
+            }),
+          onRowUpdate: (newData, oldData) =>
+            new Promise((resolve) => {
+              setTimeout(() => {
+                resolve();
+                if (oldData) {
+                  this.setState((prevState) => {
+                    const data = [...prevState.data];
+                    data[data.indexOf(oldData)] = newData;
+                    return { ...prevState, data };
+                  });
+                }
+              }, 600);
+            }),
+          onRowDelete: (oldData) =>
+            new Promise((resolve) => {
+              setTimeout(() => {
+                resolve();
+                this.setState((prevState) => {
+                  const data = [...prevState.data];
+                  data.splice(data.indexOf(oldData), 1);
+                  
+                  return { ...prevState, data };
+                });
+              }, 600);
+            }),
+        }}
+      />
+    );
+  }
+
 }
