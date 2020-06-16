@@ -1,8 +1,11 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { BrowserRouter } from  'react-router-dom'
-import { Route, Link } from  'react-router-dom'
+import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
+import PageNotFound from "./components/PageNotFound"
+import  MaterialTableDemo  from  './MaterialTableDemo'
+import  Table_Alumnos_PAW  from  './components/Table_Alumnos_PAW'
+import UsuariosList from './components/UsuariosList'
 
 function App() {
   return (
@@ -11,7 +14,6 @@ function App() {
         <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.js</code> and save to reload.
-
         </p>
         <a
           className="App-link"
@@ -21,6 +23,28 @@ function App() {
         >
           Learn React
         </a>
+        <div className="app s-pxy-2">
+          <h1 className="s-center">Bienvenidos a PAW</h1>
+          <Router>
+            <ul className="nav-container s-border s-main-center s-pl-0">
+              
+              <li className="nav-container--item s-mr-2">
+              <Link to="/">UsuariosTable</Link></li>
+              
+              <li className="nav-container--item s-mr-2">
+              <Link to="/info">AlumnoTable</Link></li>
+              
+              <li className="nav-container--item">
+              <Link to="/contacto">Contactanos</Link></li>
+            </ul>
+            <Switch>
+              <Route exact path="/" component={MaterialTableDemo}/>
+              <Route exact path="/info" component={Table_Alumnos_PAW}/>
+              <Route exact path="/contacto" component={MaterialTableDemo}/>
+              <Route component={PageNotFound}/>
+            </Switch>
+          </Router>
+          </div>
       </header>
     </div>
   );
