@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .models import Usuario, Alumno, Agente, Materia, ETS, Tipo_tramite, Tramite, Tipo_archivo, Archivo_adjunto
 from .serializers import UsuarioSerializer,AlumnoSerializer,AgenteSerializer,MateriaSerializer,ETSSerializer,Tipo_tramiteSerializer,TramiteSerializer,Tipo_archivoSerializer,Archivo_adjuntoSerializer
-from rest_framework import permissions
+from rest_framework import permissions, authentication
 
 #Vistas basadas en funciones
 from rest_framework import status
@@ -128,8 +128,10 @@ class UsuarioMixin(object):
     serializer_class = UsuarioSerializer
 
 class UsuarioList(UsuarioMixin, ListCreateAPIView):
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)   
+    #authentication_classes = ((authentication.SessionAuthentication, authentication.TokenAuthentication, authentication.BasicAuthentication))
     pass
 class UsuarioDetails(UsuarioMixin, RetrieveUpdateDestroyAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    #authentication_classes = ((authentication.SessionAuthentication, authentication.TokenAuthentication, authentication.BasicAuthentication))
     pass

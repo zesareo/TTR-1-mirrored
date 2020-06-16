@@ -1,7 +1,10 @@
 import React, {Component} from 'react';
 import MaterialTable from 'material-table';
-import MaterialTableDemo2 from './MaterialTableDemo2';
-import axios from 'axios';
+//import axios from 'axios';
+import { formatMs } from '@material-ui/core';
+import UsuariosService from './services/UsuariosService';
+
+const usuariosService = new UsuariosService();
 
 export default class MaterialTableDemo extends Component {
   constructor(props){
@@ -9,13 +12,15 @@ export default class MaterialTableDemo extends Component {
 
     this.state={
       columns: [
-        //{ title: 'id', field: 'id', type: 'numeric' },
+        //{ title: 'id', field: 'id', show: false },
         { title: 'rol', field: 'rol' },
         { title: 'correo', field: 'correo' },
         { title: 'contrasena', field: 'contrasena'},  
+        { title: 'paterno', field: 'paterno' },
         { title: 'paterno', field: 'materno' },
         { title: 'nombre', field: 'nombre' },
-        { title: 'nacimiento', field: 'nacimiento', type: 'date' },
+       // { title: 'nacimiento', field: 'nacimiento' , type: date formatMs(YYYY-MM-DD)},
+       { title: 'nacimiento', field: 'nacimiento'},
         { title: 'telefono', field: 'telefono' },
         { title: 'domicilio', field: 'domicilio' },
         
@@ -27,13 +32,16 @@ export default class MaterialTableDemo extends Component {
   }
 
   componentDidMount(){
-    const url = 'http://localhost:8000/api/appstart/v2/Usuario/';
     /*
+    const url = 'http://localhost:8000/api/appstart/v2/Usuario/';
     axios.get(url).then(response => response.data).then(data => {
       console.log("data",data)
-    })*/
-    
+    })  
     axios.get(url).then(response => response.data).then(data => {
+      this.setState({data:data})
+    })*/
+
+    usuariosService.getUsuarios().then(data => {
       this.setState({data:data})
     })
 
@@ -52,9 +60,12 @@ export default class MaterialTableDemo extends Component {
                 resolve();
                 this.setState((prevState) => {
                   const data = [...prevState.data];
-                  data.push(newData);
                   //API CREAR                  
-                  axios.post('http://localhost:8000/api/appstart/v2/Usuario',newData)
+                  console.log("data",newData)
+                  //let res = axios.post('http://localhost:8000/api/appstart/v2/Usuario/',newData)
+                  usuariosService.createUsuario(newData)
+                  //FALTA VALIDAR SI SE CREO EL USUARIO PARA INSERTARLO EN LA TABLA
+                  data.push(newData);                   
                   return { ...prevState, data };
                 });
               }, 600);
@@ -67,6 +78,10 @@ export default class MaterialTableDemo extends Component {
                   this.setState((prevState) => {
                     const data = [...prevState.data];
                     data[data.indexOf(oldData)] = newData;
+                    //API UPDATE                  
+                    console.log("data",newData)
+                    //axios.put('http://localhost:8000/api/appstart/v2/Usuario/${usuario.pk}',newData)
+                    //usuariosService.updateUsuario(newData)
                     return { ...prevState, data };
                   });
                 }
@@ -79,7 +94,10 @@ export default class MaterialTableDemo extends Component {
                 this.setState((prevState) => {
                   const data = [...prevState.data];
                   data.splice(data.indexOf(oldData), 1);
-                  
+                  //API DELETE                  
+                  console.log("data",oldData)
+                  //axios.delete('http://localhost:8000/api/appstart/v2/Usuario/${usuario.pk}',oldData)
+                  //usuariosService.deleteUsuario(oldData)
                   return { ...prevState, data };
                 });
               }, 600);
