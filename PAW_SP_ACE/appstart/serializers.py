@@ -19,6 +19,7 @@ class AlumnoSerializer(serializers.ModelSerializer):
         model = Alumno
         fields = ['usuario','boleta','curp','fecha_ingreso']
         
+        
     def create(self, validated_data):
         #Crear usuario
         usuario_data = validated_data.pop('usuario')
@@ -32,8 +33,24 @@ class AlumnoSerializer(serializers.ModelSerializer):
 
         user = User.objects.create_user(user, correo, passw)
         user.save()
-
+        
         return alumno
+
+    def update(self,instance, validated_data):
+        '''
+        usuario.id
+        usuario.rol
+        ...
+        boleta
+        '''
+        #'id','rol','correo','contrasena','paterno','materno','nombre','nacimiento','telefono','domicilio'
+        instance.boleta = validated_data.get('boleta', instance.boleta)
+        instance.curp = validated_data.get('curp', instance.curp)
+        instance.fecha_ingreso = validated_data.get('fecha_ingreso', instance.fecha_ingreso)
+        instance.save()
+        return instance
+        
+        
 
 class AgenteSerializer(serializers.ModelSerializer):
     """

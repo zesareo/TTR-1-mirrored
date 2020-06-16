@@ -2,19 +2,22 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
+/*
 import RegistroETS from './RegistroETS';
 import Checkout from './Checkout';
 import AppLogin from './components/AppLogin';
 import SignInSide from './components/SignInSide';
 import SignUp from './components/SignUp';
+*/
 import MaterialTableDemo from './MaterialTableDemo';
 import * as serviceWorker from './serviceWorker';
-
 
 import { BrowserRouter } from  'react-router-dom'
 import { Route, Link } from  'react-router-dom'
 import  UsuariosList  from  './components/UsuariosList'
 import  UsuarioCreateUpdate  from  './components/UsuarioCreateUpdate'
+import Table_Alumnos_PAW from './components/Table_Alumnos_PAW'
+
 
 const BaseLayout = () => (
   <div className="container-fluid">
@@ -46,16 +49,22 @@ const BaseLayout = () => (
 ReactDOM.render(
   
   <React.StrictMode>
-    <BrowserRouter>
+     <Table_Alumnos_PAW/>
+     <App />
+       <BrowserRouter>
         <BaseLayout/>
       </BrowserRouter>
-    <AppLogin />
+    {/*
+   
     <SignUp/>
     <SignInSide/>
+    
     <App />
     <RegistroETS/>
     <Checkout/>
     <MaterialTableDemo/>
+    */}
+    
   </React.StrictMode>,
   document.getElementById('root')  
 );
