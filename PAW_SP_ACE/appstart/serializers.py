@@ -14,20 +14,23 @@ class AlumnoSerializer(serializers.ModelSerializer):
     A usuer serializer to return the user details
     """
     usuario = UsuarioSerializer(required=True)
+    
     class Meta:
         model = Alumno
         fields = ['usuario','boleta','curp','fecha_ingreso']
-
+        
     def create(self, validated_data):
+        #Crear usuario
         usuario_data = validated_data.pop('usuario')
         usuario = Usuario.objects.create(**usuario_data)
+        #Crear alumno1
         alumno = Alumno.objects.create(usuario = usuario, **validated_data)
-        print ('Hello, world!')
+        #Crear user
         user = validated_data.pop('boleta')
-        #passw = validated_data.pop('usuario.contrasena')
-        correo = validated_data.pop('usuario[1]')
+        passw = usuario_data.pop('contrasena')
+        correo = usuario_data.pop('correo')
 
-        user = User.objects.create_user(user, 'correo@CORREO', 'jeje')
+        user = User.objects.create_user(user, correo, passw)
         user.save()
 
         return alumno

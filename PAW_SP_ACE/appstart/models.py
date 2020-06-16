@@ -1,19 +1,23 @@
 from django.db import models
 from jsonfield import JSONField
+from django import forms
 
 class Usuario(models.Model):    
     rol = models.CharField('Rol', max_length=45,blank = False)
     correo = models.EmailField('Correo', max_length=45,blank=False)
-    contrasena=models.CharField('Contraseña',max_length=30,blank=False)
+    contrasena=models.CharField('Contraseña',max_length=45, null = True)
     paterno = models.CharField('Paterno', max_length=45,blank=False)
     materno = models.CharField('Materno', max_length=45,blank=False)
     nombre = models.CharField('Nombre', max_length=45,blank=False)
     nacimiento =  models.DateField()
     telefono = models.IntegerField('Teléfono',null=True) #NULL   
     domicilio = models.CharField('Domicilio', max_length=150) #NULL
-
+    
+    class ReadonlyMeta:
+        readonly = ["contrasena"]
     #def __str__(self):
      #   return "%s User" % self.nombre
+
     
 class Alumno(models.Model):   
     usuario = models.OneToOneField(Usuario,on_delete=models.CASCADE, primary_key=True,) #One to one relations

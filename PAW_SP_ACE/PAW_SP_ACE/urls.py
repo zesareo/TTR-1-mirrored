@@ -37,6 +37,11 @@ schema_view = get_schema_view(
    permission_classes=(permissions.AllowAny,),
 )
 
+'''
+    Adding login to the Browsable API https://www.django-rest-framework.org/tutorial/4-authentication-and-permissions/
+'''
+from django.conf.urls import include
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/appstart/', include('appstart.urls')),
@@ -47,5 +52,7 @@ urlpatterns = [
     path('admin/doc/', include('django.contrib.admindocs.urls')), #Documentacion Django
     re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'), #Documentacion DRF
     re_path(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'), #Documentacion DRF
-    re_path(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'), #Documentacion DRF    
+    re_path(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'), #Documentacion DRF  
+    ##login browsable API, no incluir si no se requiere autenticacion de la API
+    path('api-auth/', include('rest_framework.urls')), 
 ]

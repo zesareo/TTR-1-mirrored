@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'django.contrib.admindocs',  #Documentacion Django
     'drf_yasg', #Documentacion DRF
+    "django_readonly_field",
 ]
 
 MIDDLEWARE = [
@@ -60,11 +61,13 @@ MIDDLEWARE = [
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
-        #'rest_framework.permissions.IsAuthenticated',
-        'rest_framework.permissions.AllowAny',
+        #'rest_framework.permissions.IsAuthenticated', #solo usuarios autenticados pueden acceder a la api
+        'rest_framework.permissions.AllowAny', 
     ),
+    #'PAGE_SIZE': 10,
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        #'rest_framework.authentication.TokenAuthentication',
     ),  
 }
 
