@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from appstart.models import Usuario, Alumno, Agente, Materia, ETS, Alumno_ETS, Tipo_tramite, Tramite, Tipo_archivo, Archivo_adjunto
-from appstart.serializers import UsuarioSerializer,AlumnoSerializer #,AgenteSerializer,MateriaSerializer,ETSSerializer,Alumno_ETSSerializer,Tipo_tramiteSerializer,TramiteSerializer,Tipo_archivoSerializer,Archivo_adjuntoSerializer
-from rest_framework.permissions import IsAuthenticated
+from appstart.models import Usuario, Alumno, Agente, Materia, ETS, Alumno_ETS, Tipo_tramite, Tramite, Tipo_archivo, Archivo_adjunto,Alumno_ETS
+from appstart.serializers import UsuarioSerializer,AlumnoSerializer ,AgenteSerializer,MateriaSerializer,ETSSerializer,Tipo_tramiteSerializer,TramiteSerializer,Tipo_archivoSerializer,Archivo_adjuntoSerializer,Alumno_ETSSerializer
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
 #Vistas basadas en clases && Vistas con clases genericas y mixins
 '''
@@ -30,6 +30,7 @@ class UsuarioList(UsuarioMixin, ListCreateAPIView):
     pass
 class UsuarioDetails(UsuarioMixin, RetrieveUpdateDestroyAPIView):
     #permission_classes = (IsAuthenticated,)
+    permission_classes = [IsAdminUser] #Solo agentes puedes ver detalles
     pass
 
 '''
@@ -43,5 +44,115 @@ class AlumnoList(AlumnoMixin, ListCreateAPIView):
     #permission_classes = (IsAuthenticated,)
     pass
 class AlumnoDetails(AlumnoMixin, RetrieveUpdateDestroyAPIView):
+    #permission_classes = (IsAuthenticated,)
+    pass
+
+'''
+    CRUD AGENTE
+'''
+class AgenteMixin(object):
+    queryset = Agente.objects.all()
+    serializer_class = AgenteSerializer
+
+class AgenteList(AgenteMixin, ListCreateAPIView):
+    #permission_classes = (IsAuthenticated,)
+    pass
+class AgenteDetails(AgenteMixin, RetrieveUpdateDestroyAPIView):
+    #permission_classes = (IsAuthenticated,)
+    pass
+
+'''
+    CRUD Materia
+'''
+class MateriaMixin(object):
+    queryset = Materia.objects.all()
+    serializer_class = MateriaSerializer
+
+class MateriaList(MateriaMixin, ListCreateAPIView):
+    #permission_classes = (IsAuthenticated,)
+    pass
+class MateriaDetails(MateriaMixin, RetrieveUpdateDestroyAPIView):
+    #permission_classes = (IsAuthenticated,)
+    pass
+
+'''
+    CRUD ETS
+'''
+class ETSMixin(object):
+    queryset = ETS.objects.all()
+    serializer_class = ETSSerializer
+
+class ETSList(ETSMixin, ListCreateAPIView):
+    #permission_classes = (IsAuthenticated,)
+    pass
+class ETSDetails(ETSMixin, RetrieveUpdateDestroyAPIView):
+    #permission_classes = (IsAuthenticated,)
+    pass
+'''
+    CRUD Tipo Tramite
+'''
+class Tipo_tramiteMixin(object):
+    queryset = Tipo_tramite.objects.all()
+    serializer_class = Tipo_tramiteSerializer
+
+class Tipo_tramiteList(Tipo_tramiteMixin, ListCreateAPIView):
+    #permission_classes = (IsAuthenticated,)
+    pass
+class Tipo_tramiteDetails(Tipo_tramiteMixin, RetrieveUpdateDestroyAPIView):
+    #permission_classes = (IsAuthenticated,)
+    pass
+
+'''
+    CRUD Tramite
+'''
+class TramiteMixin(object):
+    queryset = Tramite.objects.all()
+    serializer_class = TramiteSerializer
+
+class TramiteList(TramiteMixin, ListCreateAPIView):
+    #permission_classes = (IsAuthenticated,)
+    pass
+class TramiteDetails(TramiteMixin, RetrieveUpdateDestroyAPIView):
+    #permission_classes = (IsAuthenticated,)
+    pass
+
+'''
+    CRUD Tipo Archivo
+'''
+class Tipo_archivoMixin(object):
+    queryset = Tipo_archivo.objects.all()
+    serializer_class = Tipo_archivoSerializer
+
+class Tipo_archivoList(Tipo_archivoMixin, ListCreateAPIView):
+    #permission_classes = (IsAuthenticated,)
+    pass
+class Tipo_archivoDetails(Tipo_archivoMixin, RetrieveUpdateDestroyAPIView):
+    #permission_classes = (IsAuthenticated,)
+    pass
+
+'''
+    CRUD Archivo Adjunto
+'''
+class Archivo_adjuntoMixin(object):
+    queryset = Archivo_adjunto.objects.all()
+    serializer_class = Archivo_adjuntoSerializer
+
+class Archivo_adjuntoList(Archivo_adjuntoMixin, ListCreateAPIView):
+    #permission_classes = (IsAuthenticated,)
+    pass
+class Archivo_adjuntoDetails(Archivo_adjuntoMixin, RetrieveUpdateDestroyAPIView):
+    #permission_classes = (IsAuthenticated,)
+    pass
+'''
+    CRUD Alumno_ETS
+'''
+class Alumno_ETSMixin(object):
+    queryset = Alumno_ETS.objects.all()
+    serializer_class = Alumno_ETSSerializer
+
+class Alumno_ETSList(Alumno_ETSMixin, ListCreateAPIView):
+    #permission_classes = (IsAuthenticated,)
+    pass
+class Alumno_ETSDetails(Alumno_ETSMixin, RetrieveUpdateDestroyAPIView):
     #permission_classes = (IsAuthenticated,)
     pass

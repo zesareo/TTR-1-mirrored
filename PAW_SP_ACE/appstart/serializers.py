@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Usuario,Alumno,Agente,Materia,ETS,Tipo_tramite,Tramite,Tipo_archivo,Archivo_adjunto
+from .models import Usuario,Alumno,Agente,Materia,ETS,Tipo_tramite,Tramite,Tipo_archivo,Archivo_adjunto,Alumno_ETS
 from django.contrib.auth.models import User
 
 class UsuarioSerializer(serializers.ModelSerializer):
@@ -61,11 +61,48 @@ class AgenteSerializer(serializers.ModelSerializer):
         model = Agente
         fields = ['usuario','folio']
 
+    '''
     def create(self, validated_data):
         usuario_data = validated_data.pop('usuario')
         usuario = Usuario.objects.create(**usuario_data)
         agente = Agente.objects.create(usuario = usuario, **validated_data)
         return agente
+    '''
+    def create(self, validated_data):
+        #Crear usuario
+        usuario_data = validated_data.pop('usuario')
+        usuario = Usuario.objects.create(**usuario_data)
+        #Crear Agente
+        agente = Agente.objects.create(usuario = usuario, **validated_data)
+        #Crear user
+        user = validated_data.pop('folio')
+        passw = usuario_data.pop('contrasena')
+        correo = usuario_data.pop('correo')
+        is_staff = True
+        is_superuser = False
+        
+        user = User.objects.create_user(user, correo, passw)
+        #user = User.objects.create_superuser(user, correo, passw, is_staff, is_superuser)
+        user.save()
+        user.is_staff = True
+        user.save()
+        
+        return agente
+
+    def update(self,instance, validated_data):
+        '''
+        usuario.id
+        usuario.rol
+        ...
+        boleta
+        '''
+        #'id','rol','correo','contrasena','paterno','materno','nombre','nacimiento','telefono','domicilio'
+        instance.boleta = validated_data.get('boleta', instance.boleta)
+        instance.curp = validated_data.get('curp', instance.curp)
+        instance.fecha_ingreso = validated_data.get('fecha_ingreso', instance.fecha_ingreso)
+        instance.save()
+        return instance
+    
 
 
 class MateriaSerializer(serializers.ModelSerializer):   
@@ -90,17 +127,9 @@ class ETSSerializer(serializers.ModelSerializer):
    
     class Meta:
         model = ETS
-        fields = ['alumno','turno','precio','materia','fecha','estatus']
+        fields = ['id','alumno','turno','precio','materia','fecha','estatus']
      
-    '''
-    def create(self, validated_data):
-        materias_data = validated_data.pop('materia')
-        materia = Materia.objects.create(**materias_data)
-        ets = ETS.objects.create(materia = materia, **validated_data)
-        return ets_
-    '''
 
-'''
 class Alumno_ETSSerializer(serializers.ModelSerializer):
     
     #A alumno & ets serializer to return the alumno & ets details
@@ -115,29 +144,29 @@ class Alumno_ETSSerializer(serializers.ModelSerializer):
    
     class Meta:
         model = Alumno_ETS
-        fields = ['alumno','ets','fecha','estatus']
-'''
+        fields = ['id','alumno','ets']
+
 
 class Tipo_tramiteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tipo_tramite
-        fields = ['nombre']
+        fields = ['id','nombre']
 
 class TramiteSerializer(serializers.ModelSerializer):
     #alumno = AlumnoSerializer(many=True, read_only=True)
     #tipo_tramite = Tipo_tramiteSerializer(many=True, read_only=True)
     class Meta:
         model = Tramite
-        fields = ['alumno','tipo_tramite','fecha_solicitud','ciclo_escolar','estatus','documento_firmado','comentario','atributos_dictamen']
+        fields = ['id','alumno','tipo_tramite','fecha_solicitud','ciclo_escolar','estatus','documento_firmado','comentario','atributos_dictamen']
 
 class Tipo_archivoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tipo_archivo
-        fields = ['nombre']
+        fields = ['id','nombre']
 
 class Archivo_adjuntoSerializer(serializers.ModelSerializer):
     #tramite = TramiteSerializer(many=True, read_only=True)
     #tipo_archivo = Tipo_archivoSerializer(many=True, read_only=True)
     class Meta:
         model = Archivo_adjunto
-        fields = ['tramite','tipo_archivo','documento']
+        fields = ['id','tramite','tipo_archivo','documento']

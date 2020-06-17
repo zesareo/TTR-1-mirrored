@@ -2,13 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-/*
+
 import RegistroETS from './RegistroETS';
 import Checkout from './Checkout';
 import AppLogin from './components/AppLogin';
 import SignInSide from './components/SignInSide';
 import SignUp from './components/SignUp';
-*/
+
 import MaterialTableDemo from './MaterialTableDemo';
 import * as serviceWorker from './serviceWorker';
 
@@ -49,6 +49,7 @@ const BaseLayout = () => (
 ReactDOM.render(
   
   <React.StrictMode>
+     <AppLogin/>
      <Table_Alumnos_PAW/>
      <App />
        <BrowserRouter>
@@ -56,9 +57,9 @@ ReactDOM.render(
       </BrowserRouter>
     {/*
    
+    
     <SignUp/>
     <SignInSide/>
-    
     <App />
     <RegistroETS/>
     <Checkout/>
