@@ -42,11 +42,12 @@ INSTALLED_APPS = [
     'core.apps.CoreConfig', #Activate app Manejo de sesion auth
     'rest_framework', #enable rest_framework
     'corsheaders', #enable corsheades
-    'rest_framework.authtoken',
+    'rest_framework.authtoken',  # <-- Here
     'django.contrib.admindocs',  #Documentacion Django
     'drf_yasg', #Documentacion DRF
     "django_readonly_field",
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -66,8 +67,8 @@ REST_FRAMEWORK = {
     ),
     #'PAGE_SIZE': 10,
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-        #'rest_framework.authentication.TokenAuthentication',
+        #'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.TokenAuthentication',        # <-- And here
     ),  
 }
 
@@ -77,9 +78,11 @@ CORS_ORIGIN_WHITELIST = (
 
 CORS_ALLOW_CREDENTIALS = True
 
+'''
 JWT_AUTH = {
     'JWT_RESPONSE_PAYLOAD_HANDLER': 'PAW_SP_ACE.utils.my_jwt_response_handler'
 }
+'''
 
 ROOT_URLCONF = 'PAW_SP_ACE.urls'
 

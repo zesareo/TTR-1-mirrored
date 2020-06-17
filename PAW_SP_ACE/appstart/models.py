@@ -72,8 +72,8 @@ class ETS(models.Model):
 class Alumno_ETS(models.Model):
     alumno = models.ForeignKey(Alumno, on_delete = models.CASCADE) #Many to one
     ets = models.ForeignKey(ETS, related_name='etss', on_delete = models.CASCADE) #Many to one
-    fecha= models.DateField() 
-    estatus = models.CharField('Estatus',max_length=25, blank = False)  
+    #fecha= models.DateField() 
+    #estatus = models.CharField('Estatus',max_length=25, blank = False)  
 
 
 class Tipo_tramite(models.Model):
