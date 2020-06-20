@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from appstart.models import Usuario, Alumno, Agente, Materia, ETS, Alumno_ETS, Tipo_tramite, Tramite, Tipo_archivo, Archivo_adjunto,Alumno_ETS
-from appstart.serializers import UsuarioSerializer,AlumnoSerializer ,AgenteSerializer,MateriaSerializer,ETSSerializer,Tipo_tramiteSerializer,TramiteSerializer,Tipo_archivoSerializer,Archivo_adjuntoSerializer,Alumno_ETSSerializer, Alumno_ETSDescripcionSerializer
-from rest_framework.permissions import IsAuthenticated, IsAdminUser 
+from appstart.serializers import UsuarioSerializer,AlumnoSerializer ,AgenteSerializer,MateriaSerializer,ETSSerializer,Tipo_tramiteSerializer,TramiteSerializer,Tipo_archivoSerializer,Archivo_adjuntoSerializer,Alumno_ETSSerializer
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
 #Vistas basadas en clases && Vistas con clases genericas y mixins
 '''
@@ -151,56 +151,8 @@ class Alumno_ETSMixin(object):
     serializer_class = Alumno_ETSSerializer
 
 class Alumno_ETSList(Alumno_ETSMixin, ListCreateAPIView):
-    pass
     #permission_classes = (IsAuthenticated,)
-    
+    pass
 class Alumno_ETSDetails(Alumno_ETSMixin, RetrieveUpdateDestroyAPIView):
     #permission_classes = (IsAuthenticated,)
     pass
-
-#VISTA GENERICA FILTRADO
-class Alumno_ETSBY(generics.ListCreateAPIView):
-    queryset = Alumno_ETS.objects.all()
-    serializer_class = Alumno_ETSSerializer
-    
-    def get_queryset(self):
-           """
-           This view should return a list of all models by
-           the maker passed in the URL
-           """
-           maker = self.kwargs['alumno']
-           #marker2 = self.kwargs['ets']
-           return Alumno_ETS.objects.filter(alumno=maker)
-
-class Alumno_ETSDescripcionBY(generics.ListCreateAPIView):
-    queryset = Alumno_ETS.objects.all()
-    serializer_class = Alumno_ETSDescripcionSerializer
-    
-    def get_queryset(self):
-           """
-           This view should return a list of all models by
-           the maker passed in the URL
-           """
-           maker = self.kwargs['alumno']
-           marker2 = self.kwargs['ets']
-           return Alumno_ETS.objects.filter(alumno=maker, ets = marker2)
-
-class Alumno_ETSDescripcion(generics.ListCreateAPIView):
-    queryset = Alumno_ETS.objects.all()
-    serializer_class = Alumno_ETSDescripcionSerializer
-
-
-class TramiteBY(generics.ListCreateAPIView):
-    queryset = Tramite.objects.all()
-    serializer_class = TramiteSerializer
-    
-    def get_queryset(self):
-           """
-           This view should return a list of all models by
-           the maker passed in the URL
-           """
-           maker = self.kwargs['alumno']
-           return Tramite.objects.filter(alumno=maker)
-
-
-
