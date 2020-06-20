@@ -33,15 +33,7 @@ urlpatterns = [
     re_path(r'^Archivo_Adjunto/(?P<pk>[0-9]+)$', views.Archivo_adjuntoDetails.as_view() ),    
    
     re_path(r'^Alumno_ETS/$', views.Alumno_ETSList.as_view() ),  
-    re_path(r'^Alumno_ETS/(?P<pk>[0-9]+)$', views.Alumno_ETSDetails.as_view() ),
-
-    re_path(r'^Alumno_ETS/by/(?P<alumno>[0-9]+)$', views.Alumno_ETSBY.as_view() ),  
-    re_path(r'^Alumno_ETSDescripcion/by/(?P<alumno>[0-9]+)$', views.Alumno_ETSDescripcionBY.as_view() ), 
-
-    re_path(r'^Alumno_ETSDescripcion/', views.Alumno_ETSDescripcion.as_view() ),
-    #?P<make>\w+)/$'
-
-    re_path(r'^Tramite/by/(?P<alumno>[0-9]+)$', views.TramiteBY.as_view() ),
+    re_path(r'^Alumno_ETS/(?P<pk>[0-9]+)$', views.Alumno_ETSDetails.as_view() ),    
    
    
 ]

@@ -43,22 +43,10 @@ class AlumnoSerializer(serializers.ModelSerializer):
         ...
         boleta
         '''
-        usuario_data = validated_data.pop('usuario')
-        usuario = Usuario.objects.create(**usuario_data)
         #'id','rol','correo','contrasena','paterno','materno','nombre','nacimiento','telefono','domicilio'
-       
         instance.boleta = validated_data.get('boleta', instance.boleta)
         instance.curp = validated_data.get('curp', instance.curp)
         instance.fecha_ingreso = validated_data.get('fecha_ingreso', instance.fecha_ingreso)
-
-        '''
-        usuario_list = []
-        for usuario in usuario_data:
-            usuario, created = Usuario.objects.get_or_create(rol = usuario['rol'])
-            usuario_list.append(usuario)
-        '''
-
-        instance.usuario = usuario
         instance.save()
         return instance
         
@@ -108,11 +96,10 @@ class AgenteSerializer(serializers.ModelSerializer):
         ...
         boleta
         '''
-        usuario_data = validated_data.pop('usuario')
-        usuario = Usuario.objects.create(**usuario_data)
+        #'id','rol','correo','contrasena','paterno','materno','nombre','nacimiento','telefono','domicilio'
         instance.boleta = validated_data.get('boleta', instance.boleta)
-        
-        instance.usuario = usuario
+        instance.curp = validated_data.get('curp', instance.curp)
+        instance.fecha_ingreso = validated_data.get('fecha_ingreso', instance.fecha_ingreso)
         instance.save()
         return instance
     
@@ -147,6 +134,14 @@ class Alumno_ETSSerializer(serializers.ModelSerializer):
     
     #A alumno & ets serializer to return the alumno & ets details
     
+    #usuario = UsuarioSerializer(required=True)
+    #alumno = AlumnoSerializer(read_only=False)
+    #materia = MateriaSerializer(read_only = False)
+    #ets = ETSSerializer(read_only=False) #Lista 
+    
+    #alumno = serializers.PrimaryKeyRelatedField(read_only=False)
+    #ets = serializers.PrimaryKeyRelatedField(read_only=False)
+   
     class Meta:
         model = Alumno_ETS
         fields = ['id','alumno','ets']
@@ -175,15 +170,3 @@ class Archivo_adjuntoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Archivo_adjunto
         fields = ['id','tramite','tipo_archivo','documento']
-
-
-class Alumno_ETSDescripcionSerializer(serializers.ModelSerializer):
-    
-    #A alumno & ets serializer to return the alumno & ets details
-    
-    alumno = AlumnoSerializer(read_only=True)
-    ets = ETSSerializer(read_only=True)  
-   
-    class Meta:
-        model = Alumno_ETS
-        fields = ['id','alumno','ets']
