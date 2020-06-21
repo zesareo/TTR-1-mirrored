@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from appstart.models import Usuario, Alumno, Agente, Materia, ETS, Alumno_ETS, Tipo_tramite, Tramite, Tipo_archivo, Archivo_adjunto,Alumno_ETS
-from appstart.serializers import UsuarioSerializer,AlumnoSerializer ,AgenteSerializer,MateriaSerializer,ETSSerializer,Tipo_tramiteSerializer,TramiteSerializer,Tipo_archivoSerializer,Archivo_adjuntoSerializer,Alumno_ETSSerializer, Alumno_ETSDescripcionSerializer
+from appstart.serializers import UsuarioSerializer,AlumnoSerializer ,AgenteSerializer,MateriaSerializer,ETSSerializer,Tipo_tramiteSerializer,TramiteSerializer,Tipo_archivoSerializer,Archivo_adjuntoSerializer,Alumno_ETSSerializer, Alumno_ETSDescripcionSerializer, TramiteFase1Serializer
 from rest_framework.permissions import IsAuthenticated, IsAdminUser 
 
 #Vistas basadas en clases && Vistas con clases genericas y mixins
@@ -114,7 +114,20 @@ class TramiteList(TramiteMixin, ListCreateAPIView):
     pass
 class TramiteDetails(TramiteMixin, RetrieveUpdateDestroyAPIView):
     #permission_classes = (IsAuthenticated,)
+    #SOLO EL ADMINISTRADOR PUEDE HACER ESTA ACCION PARA CARGAR EL DOCUMENTO
     pass
+
+'''
+    Tramite Fase 1, no muestra documento
+'''
+class TramiteFase1Mixin(object):
+    queryset = Tramite.objects.all()
+    serializer_class = TramiteFase1Serializer
+
+class TramiteFase1List(TramiteFase1Mixin, ListCreateAPIView):
+    #permission_classes = (IsAuthenticated,)
+    pass
+
 
 '''
     CRUD Tipo Archivo
@@ -201,6 +214,7 @@ class TramiteBY(generics.ListCreateAPIView):
            """
            maker = self.kwargs['alumno']
            return Tramite.objects.filter(alumno=maker)
+
 
 
 
