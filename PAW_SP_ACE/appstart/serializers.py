@@ -73,13 +73,6 @@ class AgenteSerializer(serializers.ModelSerializer):
         model = Agente
         fields = ['usuario','folio']
 
-    '''
-    def create(self, validated_data):
-        usuario_data = validated_data.pop('usuario')
-        usuario = Usuario.objects.create(**usuario_data)
-        agente = Agente.objects.create(usuario = usuario, **validated_data)
-        return agente
-    '''
     def create(self, validated_data):
         #Crear usuario
         usuario_data = validated_data.pop('usuario')
@@ -110,7 +103,7 @@ class AgenteSerializer(serializers.ModelSerializer):
         '''
         usuario_data = validated_data.pop('usuario')
         usuario = Usuario.objects.create(**usuario_data)
-        instance.boleta = validated_data.get('boleta', instance.boleta)
+        instance.folio = validated_data.get('folio', instance.folio)
         
         instance.usuario = usuario
         instance.save()
@@ -163,6 +156,65 @@ class TramiteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tramite
         fields = ['id','alumno','tipo_tramite','fecha_solicitud','ciclo_escolar','estatus','documento_firmado','comentario','atributos_dictamen']
+    
+    '''
+    def update(self,instance, validated_data):
+        
+        #alumno.id
+        #tipo_tramite.id
+        #...
+        #fecha_solicitud
+        
+        random_generator = Random.new().read
+
+        #Keys
+        private_key = RSA.generate(1024, random_generator)
+        public_key = private_key.publickey()
+        
+        #QR
+        img = qrcode.make('api/appstart/v2/Documento_Firmado/'+public_key)
+        
+        #Modulo de criptografia y almacenamiento de llave publica en QR
+        #1.Obtener Documento
+        
+        documento_data = validated_data.pop('documento_firmado')
+        
+        #2.Cifrar 
+        
+        #firma
+        signer = PKCS1_v1_5.new(private_key)
+        
+        #resource = 'Texto plano!'
+        resource = documento_data
+        resource = resource.encode()  #CODIFICAR = ENCRIPTAR  --- BASE DE DATOS 
+
+        sha = SHA256.new()     #HASH
+        sha.update(resource)
+
+        signature = signer.sign(sha)   #A;ADE LA FIRMA AL DOCUMENTO QUE GENERAMOS HASH  
+
+        instance.documento_firmado = resource ##RESOURCE deberia ser un objeto de tipo documento_firmado
+        instance.documento_hash = signature ##SIGNATURE deberia ser un objeto de tipo documento_hash 
+        instance.save()
+        
+        #3.Hash para dar validez al documento.
+        
+        signer = PKCS1_v1_5.new(public_key)   #QR
+
+        sha = SHA256.new()
+        sha.update(resource) #Recurso QUE VIENE CODIFICADO
+
+        result = signer.verify(sha, signature)
+        print(result)
+        
+
+        
+        #1. El administrador puede verificar la autenticidad de un documento digital, escanearia el qr(llave publica) y compara con el documento desencifraria el documento.
+       
+        
+        
+        return instance
+    '''
 
 class Tipo_archivoSerializer(serializers.ModelSerializer):
     class Meta:
@@ -187,3 +239,20 @@ class Alumno_ETSDescripcionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Alumno_ETS
         fields = ['id','alumno','ets']
+
+class TramiteFase1Serializer(serializers.ModelSerializer):
+    #alumno = AlumnoSerializer(many=True, read_only=True)
+    #tipo_tramite = Tipo_tramiteSerializer(many=True, read_only=True)
+    class Meta:
+        model = Tramite
+        fields = ['id','alumno','tipo_tramite','fecha_solicitud','ciclo_escolar','atributos_dictamen']
+
+
+
+'''
+class Documento_FirmadoSerializer(serializers.ModelSerializer):
+    llavePublica = 
+    class Meta:
+        model = Tramite
+        fields = []
+'''

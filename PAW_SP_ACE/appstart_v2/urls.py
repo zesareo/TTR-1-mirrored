@@ -42,6 +42,9 @@ urlpatterns = [
     #?P<make>\w+)/$'
 
     re_path(r'^Tramite/by/(?P<alumno>[0-9]+)$', views.TramiteBY.as_view() ),
+    re_path(r'^TramiteFase1/$', views.TramiteFase1List.as_view() ),
+    #re_path(r'^Documento_Firmado/(?P<LlavePublica>\w+)$', views.Documento_FirmadoList.as_view() ), 
+    
    
    
 ]
