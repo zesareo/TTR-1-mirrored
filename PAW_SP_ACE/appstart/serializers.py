@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Usuario,Alumno,Agente,Materia,ETS,Tipo_tramite,Tramite,Tipo_archivo,Archivo_adjunto,Alumno_ETS
 from django.contrib.auth.models import User
+import qrcode
 
 class UsuarioSerializer(serializers.ModelSerializer):
     
@@ -155,7 +156,31 @@ class TramiteSerializer(serializers.ModelSerializer):
     #tipo_tramite = Tipo_tramiteSerializer(many=True, read_only=True)
     class Meta:
         model = Tramite
-        fields = ['id','alumno','tipo_tramite','fecha_solicitud','ciclo_escolar','estatus','documento_firmado','comentario','atributos_dictamen']
+        fields = ['id','alumno','tipo_tramite','fecha_solicitud','ciclo_escolar','estatus','documento_firmado','comentario','atributos_dictamen','qr']
+    
+    #Agente solo actualiza el estatus,documento,comentario
+    def update(self,instance, validated_data):
+        # .save() will create a new instance.
+        #serializer = CommentSerializer(data=data)
+
+        # .save() will update the existing `comment` instance.
+        #serializer = CommentSerializer(comment, data=data)
+        
+        estatus = validated_data.get('estatus', instance.estatus)
+        if (estatus != 'FINALIZADO'):
+            documento_firmado = validated_data.get('documento_firmado', instance.documento_firmado)
+            comentario = validated_data.get('comentario', instance.comentario)
+            estatus = validated_data.get('estatus', instance.estatus)
+
+            qr = qrcode.make('https://www.youtube.com/watch?v=zs5G5qPudzo&list=RDzs5G5qPudzo&start_radio=1')
+
+            instance.documento_firmado = documento_firmado
+            instance.comentario = comentario
+            instance.estatus = estatus
+            instance.qr = qr
+            instance.save()
+
+        return instance
     
     '''
     def update(self,instance, validated_data):
