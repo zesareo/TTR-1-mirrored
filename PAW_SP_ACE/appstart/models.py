@@ -88,6 +88,8 @@ class Tramite(models.Model):
     documento_firmado = models.FileField() #models.BinaryField()  
     comentario = models.TextField('Comentario',blank=False)
     atributos_dictamen = JSONField()
+    qr = models.CharField('qr', max_length=128)
+    firma = models.CharField('firma', max_length=128)
 
 class Tipo_archivo(models.Model):
     nombre = models.CharField('Nombre', max_length=45, blank = False)

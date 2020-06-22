@@ -113,8 +113,8 @@ class TramiteList(TramiteMixin, ListCreateAPIView):
     #permission_classes = (IsAuthenticated,)
     pass
 class TramiteDetails(TramiteMixin, RetrieveUpdateDestroyAPIView):
-    #permission_classes = (IsAuthenticated,)
     #SOLO EL ADMINISTRADOR PUEDE HACER ESTA ACCION PARA CARGAR EL DOCUMENTO
+    #permission_classes = (IsAuthenticated,)
     pass
 
 '''
@@ -205,7 +205,7 @@ class Alumno_ETSDescripcion(generics.ListCreateAPIView):
 
 class TramiteBY(generics.ListCreateAPIView):
     queryset = Tramite.objects.all()
-    serializer_class = TramiteSerializer
+    serializer_class = TramiteFase1Serializer
     
     def get_queryset(self):
            """
@@ -214,6 +214,10 @@ class TramiteBY(generics.ListCreateAPIView):
            """
            maker = self.kwargs['alumno']
            return Tramite.objects.filter(alumno=maker)
+
+
+
+
 
 
 
