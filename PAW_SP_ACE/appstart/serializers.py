@@ -134,7 +134,7 @@ class ETSSerializer(serializers.ModelSerializer):
    
     class Meta:
         model = ETS
-        fields = ['id','alumno','turno','precio','materia','fecha','estatus']
+        fields = ['id','turno','precio','materia','fecha','estatus']
      
 
 class Alumno_ETSSerializer(serializers.ModelSerializer):
