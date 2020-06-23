@@ -10,7 +10,7 @@ class Usuario(models.Model):
     materno = models.CharField('Materno', max_length=45,blank=False)
     nombre = models.CharField('Nombre', max_length=45,blank=False)
     nacimiento =  models.DateField()
-    telefono = models.IntegerField('Teléfono',null=True) #NULL   
+    telefono = models.CharField('Teléfono',max_length=45) #NULL   
     domicilio = models.CharField('Domicilio', max_length=150) #NULL
     
     class ReadonlyMeta:

@@ -128,7 +128,6 @@ class TramiteFase1List(TramiteFase1Mixin, ListCreateAPIView):
     #permission_classes = (IsAuthenticated,)
     pass
 
-
 '''
     CRUD Tipo Archivo
 '''

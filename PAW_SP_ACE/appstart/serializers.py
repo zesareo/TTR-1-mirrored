@@ -22,19 +22,21 @@ class AlumnoSerializer(serializers.ModelSerializer):
         
         
     def create(self, validated_data):
-        #Crear usuario
-        usuario_data = validated_data.pop('usuario')
-        usuario = Usuario.objects.create(**usuario_data)
-        #Crear alumno1
-        alumno = Alumno.objects.create(usuario = usuario, **validated_data)
-        #Crear user
-        user = validated_data.pop('boleta')
-        passw = usuario_data.pop('contrasena')
-        correo = usuario_data.pop('correo')
+        try:        
+            #Crear usuario
+            usuario_data = validated_data.pop('usuario')
+            usuario = Usuario.objects.create(**usuario_data)
+            #Crear alumno1
+            alumno = Alumno.objects.create(usuario = usuario, **validated_data)
+            #Crear user
+            user = validated_data.pop('boleta')
+            passw = usuario_data.pop('contrasena')
+            correo = usuario_data.pop('correo')
 
-        user = User.objects.create_user(user, correo, passw)
-        user.save()
-        
+            user = User.objects.create_user(user, correo, passw)
+            user.save()
+                
+        except: print('Ocurrio un error')    
         return alumno
 
     def update(self,instance, validated_data):
@@ -44,23 +46,38 @@ class AlumnoSerializer(serializers.ModelSerializer):
         ...
         boleta
         '''
-        usuario_data = validated_data.pop('usuario')
-        usuario = Usuario.objects.create(**usuario_data)
-        #'id','rol','correo','contrasena','paterno','materno','nombre','nacimiento','telefono','domicilio'
-       
-        instance.boleta = validated_data.get('boleta', instance.boleta)
-        instance.curp = validated_data.get('curp', instance.curp)
-        instance.fecha_ingreso = validated_data.get('fecha_ingreso', instance.fecha_ingreso)
+        try:
+            usuario_data = validated_data.pop('usuario')
+            #usuario = Usuario.objects.create(**usuario_data)
+            usuario = instance.usuario
+            
+            #Actualiza agente
+            instance.boleta = validated_data.get('boleta', instance.boleta)
+            instance.curp = validated_data.get('curp', instance.curp)
+            instance.fecha_ingreso = validated_data.get('fecha_ingreso', instance.fecha_ingreso)
+            instance.save()
 
-        '''
-        usuario_list = []
-        for usuario in usuario_data:
-            usuario, created = Usuario.objects.get_or_create(rol = usuario['rol'])
-            usuario_list.append(usuario)
-        '''
+            #Actualiza usuario
+            #'correo','paterno','materno','nombre','nacimiento','telefono','domicilio'
+            usuario.correo = usuario_data.get( 'correo', usuario.correo)
+            usuario.paterno = usuario_data.get( 'paterno', usuario.paterno)
+            usuario.materno = usuario_data.get( 'materno', usuario.materno)
+            usuario.nombre = usuario_data.get( 'nombre', usuario.nombre)
+            usuario.nacimiento = usuario_data.get( 'nacimiento', usuario.nacimiento)
+            usuario.telefono = usuario_data.get( 'telefono', usuario.telefono)
+            usuario.domicilio = usuario_data.get( 'domicilio', usuario.domicilio)
+            usuario.save()
 
-        instance.usuario = usuario
-        instance.save()
+            '''
+            usuario_list = []
+            for usuario in usuario_data:
+                usuario, created = Usuario.objects.get_or_create(rol = usuario['rol'])
+                usuario_list.append(usuario)
+            '''
+            #instance.usuario = usuario
+            #instance.save()
+        
+        except: print('Ocurrio un error') 
         return instance
         
         
@@ -75,39 +92,59 @@ class AgenteSerializer(serializers.ModelSerializer):
         fields = ['usuario','folio']
 
     def create(self, validated_data):
-        #Crear usuario
-        usuario_data = validated_data.pop('usuario')
-        usuario = Usuario.objects.create(**usuario_data)
-        #Crear Agente
-        agente = Agente.objects.create(usuario = usuario, **validated_data)
-        #Crear user
-        user = validated_data.pop('folio')
-        passw = usuario_data.pop('contrasena')
-        correo = usuario_data.pop('correo')
-        is_staff = True
-        is_superuser = False
-        
-        user = User.objects.create_user(user, correo, passw)
-        #user = User.objects.create_superuser(user, correo, passw, is_staff, is_superuser)
-        user.save()
-        user.is_staff = True
-        user.save()
-        
+        try:
+            #Crear usuario
+            usuario_data = validated_data.pop('usuario')
+            usuario = Usuario.objects.create(**usuario_data)
+            #Crear Agente
+            agente = Agente.objects.create(usuario = usuario, **validated_data)
+            #Crear user
+            user = validated_data.pop('folio')
+            passw = usuario_data.pop('contrasena')
+            correo = usuario_data.pop('correo')
+            is_staff = True
+            is_superuser = False
+            
+            user = User.objects.create_user(user, correo, passw)
+            #user = User.objects.create_superuser(user, correo, passw, is_staff, is_superuser)
+            user.save()
+            user.is_staff = True
+            user.save()
+
+        except: print('Ocurrio un error') 
         return agente
 
     def update(self,instance, validated_data):
-        '''
-        usuario.id
-        usuario.rol
-        ...
-        boleta
-        '''
-        usuario_data = validated_data.pop('usuario')
-        usuario = Usuario.objects.create(**usuario_data)
-        instance.folio = validated_data.get('folio', instance.folio)
-        
-        instance.usuario = usuario
-        instance.save()
+        try:
+            '''
+            usuario.id
+            usuario.rol
+            ...
+            boleta
+            '''
+            usuario_data = validated_data.pop('usuario')
+            #usuario = Usuario.objects.create(**usuario_data)
+            usuario = instance.usuario
+            
+            #Actualiza agente
+            instance.folio = validated_data.get('folio', instance.folio)
+            instance.save()
+
+            #Actualiza usuario
+            #'correo','paterno','materno','nombre','nacimiento','telefono','domicilio'
+            usuario.correo = usuario_data.get( 'correo', usuario.correo)
+            usuario.paterno = usuario_data.get( 'paterno', usuario.paterno)
+            usuario.materno = usuario_data.get( 'materno', usuario.materno)
+            usuario.nombre = usuario_data.get( 'nombre', usuario.nombre)
+            usuario.nacimiento = usuario_data.get( 'nacimiento', usuario.nacimiento)
+            usuario.telefono = usuario_data.get( 'telefono', usuario.telefono)
+            usuario.domicilio = usuario_data.get( 'domicilio', usuario.domicilio)
+            usuario.save()
+
+            #instance.usuario=usuario
+            #instance.save
+            
+        except: print('Ocurrio un error') 
         return instance
     
 
