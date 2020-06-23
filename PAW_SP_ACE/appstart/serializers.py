@@ -1,7 +1,97 @@
 from rest_framework import serializers
 from .models import Usuario,Alumno,Agente,Materia,ETS,Tipo_tramite,Tramite,Tipo_archivo,Archivo_adjunto,Alumno_ETS
 from django.contrib.auth.models import User
+
 import qrcode
+#import firma_FULL as F
+#import cifradoFuncion as CF
+
+from Crypto.Hash import SHA256
+from Crypto.Signature import PKCS1_v1_5
+
+from Crypto import Random
+from Crypto.PublicKey import RSA
+import binascii
+from Crypto.Cipher import PKCS1_OAEP
+
+import qrcode
+
+def get_hash(resource_path):
+    
+    sha = SHA256.new()
+
+    #with open(resource_path, 'rb') as file:    #Django ya lo abre
+    file = resource_path
+    while True:
+        # Reading is buffered, so we can read smaller chunks.
+        chunk = file.read(sha.block_size)
+        if not chunk:
+            break
+        sha.update(chunk)
+    print('\nHASH DEL DOCUMENTO:') 
+    print(sha.hexdigest())
+
+    return sha
+
+
+def genera_qr(llave_publica, nombre_documento):
+    
+    imagen = qrcode.make(llave_publica)
+    archivo_imagen = open(nombre_documento+'.png', 'wb')
+    imagen.save(archivo_imagen)
+    archivo_imagen.close()
+
+
+def generar_llaves():
+
+    random_generator = Random.new().read
+
+    private_key = RSA.generate(1024, random_generator)
+    public_key = private_key.publickey()
+
+    llaves = [private_key,public_key]
+
+    return llaves
+
+#Firmar
+def firmar(llaves, resource):
+
+    #signer = PKCS1_v1_5.new(llaves.private_key) #firmante
+    signer = PKCS1_v1_5.new(llaves[0]) #firmante
+
+    #sha = SHA256.new()
+    #sha.update(resource)
+    sha = get_hash(resource)
+
+    print('\nHash origen --Auth')
+    print(sha.hexdigest())
+
+    signature = signer.sign(sha) #Firma = MAC
+    
+    print('\nMAC (Message Auth Code) = Hash + clave   ---integridad y auth')
+    print(signature)
+
+    return signature
+    
+#verificar Firma
+def verificarMAC(llave_publica, resource, firma):
+
+    user = PKCS1_v1_5.new(llave_publica) #usuario 
+
+    #sha = SHA256.new()
+    #sha.update(resource) 
+    sha = get_hash(resource)
+
+    print('\nHash destino --Auth')
+    print(sha.hexdigest())
+
+    result = user.verify(sha, firma)
+    
+    print('\nComprueba MAC')
+    print(result)
+
+    return result
+
 
 class UsuarioSerializer(serializers.ModelSerializer):
     
@@ -193,28 +283,34 @@ class TramiteSerializer(serializers.ModelSerializer):
     #tipo_tramite = Tipo_tramiteSerializer(many=True, read_only=True)
     class Meta:
         model = Tramite
-        fields = ['id','alumno','tipo_tramite','fecha_solicitud','ciclo_escolar','estatus','documento_firmado','comentario','atributos_dictamen','qr']
+        fields = ['id','alumno','tipo_tramite','fecha_solicitud','ciclo_escolar','estatus','documento_firmado','comentario','atributos_dictamen','qr','firma']
     
     #Agente solo actualiza el estatus,documento,comentario
     def update(self,instance, validated_data):
-        # .save() will create a new instance.
-        #serializer = CommentSerializer(data=data)
-
-        # .save() will update the existing `comment` instance.
-        #serializer = CommentSerializer(comment, data=data)
         
         estatus = validated_data.get('estatus', instance.estatus)
         if (estatus != 'FINALIZADO'):
+
             documento_firmado = validated_data.get('documento_firmado', instance.documento_firmado)
             comentario = validated_data.get('comentario', instance.comentario)
             estatus = validated_data.get('estatus', instance.estatus)
 
-            qr = qrcode.make('https://www.youtube.com/watch?v=zs5G5qPudzo&list=RDzs5G5qPudzo&start_radio=1')
+            #Firmar
+            llaves = generar_llaves()
+            resource = documento_firmado
+            firma = firmar(llaves,resource)
 
+            #Formato ACSCII
+            llave_publica = llaves[1].exportKey(format='DER')
+            llave_publica_acsii = binascii.hexlify(llave_publica).decode('utf8')
+            firma_ascii = binascii.hexlify(firma).decode('utf8') 
+
+            #Actualizo
             instance.documento_firmado = documento_firmado
             instance.comentario = comentario
             instance.estatus = estatus
-            instance.qr = qr
+            instance.qr = llave_publica_acsii
+            instance.firma= firma_ascii
             instance.save()
 
         return instance
