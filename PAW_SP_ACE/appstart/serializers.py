@@ -19,7 +19,6 @@ import qrcode
 def get_hash(resource_path):
     
     sha = SHA256.new()
-
     #with open(resource_path, 'rb') as file:    #Django ya lo abre
     file = resource_path
     while True:
@@ -281,10 +280,19 @@ class Tipo_tramiteSerializer(serializers.ModelSerializer):
 class TramiteSerializer(serializers.ModelSerializer):
     #alumno = AlumnoSerializer(many=True, read_only=True)
     #tipo_tramite = Tipo_tramiteSerializer(many=True, read_only=True)
+    #firma = serializers.SerializerMethodField()
+
     class Meta:
         model = Tramite
         fields = ['id','alumno','tipo_tramite','fecha_solicitud','ciclo_escolar','estatus','documento_firmado','comentario','atributos_dictamen','qr','firma']
     
+    '''
+    def list(self, request):
+        # Note the use of `get_queryset()` instead of `self.queryset`
+        queryset = self.get_queryset()
+        serializer = TramiteSerializer(queryset, many=True)
+        return Response(serializer.data)
+    '''
     #Agente solo actualiza el estatus,documento,comentario
     def update(self,instance, validated_data):
         
@@ -373,6 +381,25 @@ class TramiteSerializer(serializers.ModelSerializer):
         
         return instance
     '''
+
+class Tramite_REACTSerializer(serializers.ModelSerializer):
+    #alumno = AlumnoSerializer(many=True, read_only=True)
+    #tipo_tramite = Tipo_tramiteSerializer(many=True, read_only=True)
+    #firma = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Tramite
+        fields = ['id','documento_firmado','qr','firma']
+    
+    '''
+    def list(self, request):
+        # Note the use of `get_queryset()` instead of `self.queryset`
+        queryset = self.get_queryset()
+        serializer = TramiteSerializer(queryset, many=True)
+        
+        return Response(serializer.data)
+    '''
+
 
 class Tipo_archivoSerializer(serializers.ModelSerializer):
     class Meta:
